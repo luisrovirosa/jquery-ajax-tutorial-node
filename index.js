@@ -40,6 +40,54 @@ app.get('/exchange/*', function (request, response, next) {
     response.send(result);
 });
 
+Array.prototype.diff = function (a) {
+    return this.filter(function (i) {
+        return a.indexOf(i) < 0;
+    });
+};
+
+app.post('/add', function (request, response, next) {
+    var expectedParams = ['age-range', 'color', 'love', 'name'];
+    var params = request.body;
+    var missingParams = arr_diff(expectedParams, params);
+    var result = {};
+    if (!missingParams) {
+
+        result = missingParams;
+    } else {
+        result = "Saved correctly";
+    }
+    response.send(params);
+});
+
+app.get('/sleep', function (request, response, next) {
+    var rand = randomIntInc(0, 10);
+    var txt;
+    if (rand < 5) {
+        response.status(400);
+    } else {
+        txt = 'OK';
+    }
+    setTimeout(function () {
+        response.send(txt);
+    }, 2000);
+});
+
+function arr_diff(a1, a2) {
+    var a = [], diff = [];
+    for (var i = 0; i < a1.length; i++)
+        a[a1[i]] = true;
+    for (var i = 0; i < a2.length; i++)
+        if (a[a2[i]]) delete a[a2[i]];
+        else a[a2[i]] = true;
+    for (var k in a)
+        diff.push(k);
+    return diff;
+}
 app.listen(app.get('port'), function () {
     console.log("Node app is running at localhost:" + app.get('port'))
 });
+
+function randomIntInc(low, high) {
+    return Math.floor(Math.random() * (high - low + 1) + low);
+}
