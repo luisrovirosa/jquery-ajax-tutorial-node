@@ -51,6 +51,10 @@ Array.prototype.diff = function (a) {
 };
 
 app.post('/add', function (request, response, next) {
+    response.send('OK');
+    return;
+    
+
     var expectedParams = ['age-range', 'color', 'love', 'name'];
     var params = request.body;
     var missingParams = arr_diff(expectedParams, params);
