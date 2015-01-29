@@ -20,8 +20,24 @@ app.get('/', function (request, response, next) {
     response.send(explanation);
 });
 
+
 app.get('/hello/:name', function (request, response, next) {
     response.send("Hello " + request.params.name + '! This is a server response');
+});
+
+app.get('/exchange/*', function (request, response, next) {
+
+    var change = {"euro": 1, "dollar": 1.25, "pound": 0.8, "yen": 145};
+    var params = request.query;
+    var amountInEuro = params.amount / change[params.currency]
+
+    var result = {}
+
+    for (var key in change) {
+        var currentChange = change[key];
+        result[key] = currentChange * amountInEuro;
+    }
+    response.send(result);
 });
 
 app.listen(app.get('port'), function () {
