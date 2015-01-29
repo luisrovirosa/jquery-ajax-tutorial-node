@@ -1,9 +1,15 @@
 var express = require('express')
 var app = express();
 
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.set('port', (process.env.PORT || 5000));
 
-app.get('/', function (request, response) {
+app.get('/', function (request, response, next) {
     var EOF = "<br />";
     var explanation = "The methods are:" + EOF +
         "GET <a href='/email/new'>/email/new</a>&nbsp;&nbsp;&nbsp;&nbsp;-> To check if there is new email" + EOF +
@@ -14,7 +20,7 @@ app.get('/', function (request, response) {
     response.send(explanation);
 });
 
-app.get('/hello/:name', function (request, response) {
+app.get('/hello/:name', function (request, response, next) {
     response.send("Hello " + request.params.name + '! This is a server response');
 });
 
